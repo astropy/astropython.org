@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% block head_title %}
+{{name}} Creation: 
+{% endblock %}
+{% block styles %}
+{{form.media}}
+ <link rel="stylesheet" href="{{STATIC_URL}}markdown/css/editormd.css" />
+{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block js %}
+{% compress js %}
+<script src="{{STATIC_URL}}markdown/editormd.js"></script>
+<script src="{{STATIC_URL}}markdown/languages/en.js"></script>
+<script src="{{STATIC_URL}}ckeditor/ckeditor.js"></script> 
+<script type="text/javascript">
+	$(document).ready(function(){
+			var testEditormd;
+			$("#id_input_type").change(function(){
+				$("#conform_modal").modal("show");
+				});
+			$('.tag-cloud a').click(function(e) {
+				  var txt = $(e.target).text();
+				  var curr_tags = $('#id_tags').val();
+				  if(curr_tags==''){
+				  $('#id_tags').val(txt);
+				  }else{
+				  $('#id_tags').val(curr_tags+','+txt);
+				  }
+				});
+			$("#id_abstract").attr({"rows": "4"});
+			{% if name == "Packages" %}
+			$("#div_id_category > .controls label").removeClass("checkbox");
+			$("#div_id_category > .controls label").addClass("checkbox-inline");
+			{% endif %}
+			changeEditor();
+	});
+	function revert(in_type){
+		if(in_type=="WYSIWYG"){
+		$('#id_input_type option[value="Markdown"]').attr("selected","selected");
+		}
+		else{
+		$('#id_input_type option[value="WYSIWYG"]').attr("selected","selected");
+		}
+		$("#conform_modal").modal("hide");
+	}
+	function changeEditor(){
+			ch=$("#id_input_type option:selected").val();
+				if (ch=="WYSIWYG")
+				{
+					try{
+					testEditormd.editor.remove();
+					$("#div_id_body > .controls").append('<textarea class="textarea form-control" cols="40" id="id_body" name="body" rows="10"></textarea>');
+					}catch(err)
+					{
+					}
+					 CKEDITOR.config.removePlugins='floating-tools';
+					CKEDITOR.replace( 'body' );
+				}
+				else{
+					for(name in CKEDITOR.instances)
+					{
+						CKEDITOR.instances[name].destroy()
+					}
+					$("#id_body").replaceWith('<div id=\"test-editormd\"><textarea style="display:none;">{% if form.body.value and form.input_type.value == "Markdown" %}{{form.body.value|escapejs}}{% endif %}</textarea></div>');
+					testEditormd = editormd("test-editormd", {
+						width: "100%",
+						height : 800,
+						path : '{{STATIC_URL}}markdown/lib/',
+						tex:true,
+						emoji:true,
+						taskList:true,
+						flowChart:true, 
+						sequenceDiagram:true,
+						codeFold : true,
+                        syncScrolling : true,
+                        searchReplace : true,
+                        previewCodeHighlight : true,
+                        tocm : true,
+                        imageUpload : false,
+					});
+					$(".editormd-markdown-textarea").attr("name","body");
+				}
+			}
+</script>
+
+{% endcompress %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						<h1 class="title" id="title">Create {{name}} !</h1>
+					</div>                                                                                
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+<div class="modal fade" id="conform_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align:center;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel">Conformation</h2>
+		<h5>Once you change editors, the current editor contents will be lost.</h5>
+      </div>
+      <div class="modal-body">
+		<div class="btn-group" role="group" aria-label="..." style="left:25%;">
+		  <button type="button" class="btn btn-success" onclick='changeEditor();$("#conform_modal").modal("hide");'>Yes, I am sure !</button>
+		  <button type="button" class="btn btn-danger" onclick='revert($("#id_input_type option:selected").val());'>No, take me back !</button>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<section id="blog-details" class="padding-top">
+<div class="container">
+<div class="row">
+	<div class="col-lg-12">
+	{% if user.is_authenticated %}
+	<form method="POST">{% csrf_token %}
+	{{form|crispy}}
+	{% if tags %}
+	<div class="tag-cloud" style="margin-bottom:30px;">
+		<h3>Current Tags</h3>
+		<h6>(Click on the tag names to add them)</h6>
+		<ul class="nav nav-pills">
+		{% for tag in tags %}
+			<li><a>{{tag}}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<button type="submit" name="submit" class="btn btn-warning">Publish</button>
+	<button type="submit" name="save" class="btn btn-warning">Save</button>
+	</form>
+	{% else %}
+	<div class="text-center">
+	<h2>We know you are excited to post ... Login first ? </h2>
+	<div class="modal-body text-center" style="font-size: 20px;padding-bottom:100px;">
+	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/login/facebook?next={{request.get_full_path}}">Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/login/google-oauth2?next={{request.get_full_path}}">Google</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/login/github?next={{request.get_full_path}}">Github</i></a>
+	</div>
+	</div>
+	{% endif %}
+	</div><! --/col-lg-8 -->
+</div>
+</div>
+
+
+</section>
+{% endblock %}

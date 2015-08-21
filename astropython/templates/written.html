@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_title %}
+My Posts :
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						<h1 class="title">{{request.user.username}}'s Posts</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+
+<section id="blog" class="padding-top">
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+			{% if message %}
+			<div style="text-align:center;margin-bottom:50px;">
+			<h2>{{message}}</h2>
+			</div>
+			{% endif %}
+			{% if tutorials_list %}
+			<div style="text-align:center">
+			<h1>Tutorials</h1>
+			</div>
+			{% for item in tutorials_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'tutorials' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in tutorials_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'tutorials' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if announcements_list %}
+			<div style="text-align:center">
+			<h1>Announcements</h1>
+			</div>
+			{% for item in announcements_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'announcements' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in announcements_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'announcements' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if blogs_list %}
+			<div style="text-align:center">
+			<h1>Blog</h1>
+			</div>
+			{% for item in blogs_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'blog' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in blogs_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'blog' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if edresources_list %}
+			<div style="text-align:center">
+			<h1>Educational Resource</h1>
+			</div>
+			{% for item in edresources_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'education' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in edresources_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'education' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if news_list %}
+			<div style="text-align:center">
+			<h1>News</h1>
+			</div>
+			{% for item in news_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'news' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in news_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'news' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if events_list %}
+			<div style="text-align:center">
+			<h1>Events</h1>
+			</div>
+			{% for item in events_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'events' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{% endfor %}
+				{% for item in events_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'events' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if packages_list %}
+			<div style="text-align:center">
+			<h1>Packages</h1>
+			</div>
+			{% for item in packages_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'packages' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in packages_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'packages' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		{% if wiki_list %}
+			<div style="text-align:center">
+			<h1>Wiki Pages</h1>
+			</div>
+			{% for item in wiki_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'wiki' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in wiki_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'wiki' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		</div>
+		{% if snippets_list %}
+			<div style="text-align:center">
+			<h1>Code Snippets</h1>
+			</div>
+			{% for item in snippets_list %}
+				{% if item.state == "raw" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><p>Incomplete:&nbsp;&nbsp;</p><a href="{% url 'create' 'snippets' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{%endfor%}
+				{% for item in snippets_list %}
+				{% if item.state == "submitted" %}
+				<div class="col-sm-12 col-md-12">
+					<div class="single-blog single-column">
+						<div class="post-content overflow">
+							<h2 class="post-title bold">Published:&nbsp;&nbsp;<a href="{% url 'single' 'snippets' item.slug %}">{{item.title}}</a></h2>
+							<div class="post-bottom overflow">
+								<ul class="nav navbar-nav post-nav">
+									<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in item.tags.all %}{{tag.name}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+									<li><a href="#"><i class="fa fa-heart"></i>{{item.total_upvotes}} Love</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+		{% endfor %}
+		
+		{% endif %}
+		</div>
+</div>
+</section>
+
+
+{% endblock %}

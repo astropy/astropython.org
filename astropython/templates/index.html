@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_title %}
+{% endblock %}
+{% load custom_tags %}
+{% block styles %}
+<style type="text/css">
+.main-text
+{
+    position: absolute;
+    top: 50px;
+    width: 96.66666666666666%;
+    color: #FFF;
+}
+.carousel .item {
+    width: 100%; /*slider width*/
+    max-height: 600px; /*slider height*/
+}
+.carousel .item img {
+    width: 100%; /*img width*/
+}
+/*full width container*/
+@media (max-width: 767px) {
+    .block {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+}
+
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px white;
+    border-radius: 6px;
+	background: none;
+}
+
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+	background: none;
+}
+
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: white;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+} opacity:1.0 ;
+
+</style>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+	$('.custom-color').css('color',{% for slider in sliders %}{% if forloop.first %}'{{slider.text_color}}'{% endif %}{% endfor %}) ;
+	$("#carousel-example-generic").carousel({
+          interval: 20000
+        });
+	$('#custom-search-input').css('border',{% for slider in sliders %}{% if forloop.first %}'solid 1px {{slider.text_color}}'{% endif %}{% endfor %}) ;
+	if ($(window).width() < 780)
+	{
+	 $(".container-slide").hide();
+	 $(".mobi").show();
+	}
+	else{
+		$(".mobi").hide();
+		$(".container-slide").show();
+	}
+	});
+	$(window).resize(function() {
+	if ($(window).width()< 780)
+	{
+	 $(".mobi").show();
+	 $(".container-slide").hide();
+	}
+	else
+	{
+	$(".container-slide").show();
+	$(".mobi").hide();
+	}
+    $('#carousel-example-generic').on('slid.bs.carousel', function () {
+		var col=$(".carousel-inner > .active input[type=hidden]").val();
+           $('.custom-color').css('color',col) ;
+		   $('#custom-search-input').css('border',('solid 1px '+col)) ;
+         });
+    });
+</script>
+{% endblock %}
+{% block content %}
+<section id="home">
+<div class="container-slide">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="20000">
+                <ol class="carousel-indicators">
+				{% for slider in sliders %}
+                    <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter }}" {% if forloop.first %}class="active"{% endif %}></li>
+                {% endfor %}
+				</ol>
+                <div class="carousel-inner">
+					{% for slider in sliders %}
+                    <div class="item {% if forloop.first %}active{% endif %}">
+						<input type="hidden" id="color-select" value="{{slider.text_color}}">
+                        <img src="{{slider.get_image_url}}" alt="Carousel Image">
+                    </div>
+					{% endfor %}
+                </div>
+            </div>
+            <div class="main-text hidden-xs">
+				<div class="col-md-12 custom-color">
+                <div class="col-md-5 col-md-offset-1" style="margin-top:100px;">
+                    <h1 class="custom-color">Python for Astronomers</h1>
+                    <p>The purpose of this web site is to act as a community knowledge base for performing astronomy research with Python. It provides a variety of tutorials,code snippets, resources ,lists of useful packages, general discussion, advice, and also features news items, event information and announcements.</p>
+					{% if request.user.is_authenticated %}
+					<h2 class="custom-color">Welcome @{{request.user.username}}</h2>
+					{% else %}
+					<h5>To add or edit content and access a host of other features , Register or Sign In with the Oauth options below!</h5>
+                    <a href="login/facebook" class="btn btn-common custom-color" style="border-color:white;">Facebook</a>
+					<a href="login/google-oauth2" class="btn btn-common custom-color" style="border-color:white;">Google</a>
+					<a href="login/github" class="btn btn-common custom-color" style="border-color:white;">Github</a>
+					{% endif %}
+					</div>
+                <div class="col-md-6" style="margin-top:130px;">
+				<div class="container_search">
+					<div id="custom-search-input"><form role="search" action="{% url 'search' %}">
+						<div class="input-group col-md-12 custom-color">
+							<input type="hidden" name="section" value="all">
+							<input type="text" class="form-control input-lg custom-color" name='q' placeholder="What are we looking for today{% if request.user.is_authenticated %},{{request.user.username}}{% endif %} ?" />
+							<span class="input-group-btn">
+								<button class="btn btn-info btn-lg" type="submit">
+									<i class="glyphicon custom-color glyphicon-search"></i>
+								</button>
+							</span>
+				</div></form>
+				</div>
+			</div>
+			<div class="text-center" style="margin-top:50px;">
+			    <a href="{% url 'all' 'tutorials' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Tutorials</a>
+			    <a href="{% url 'all' 'snippets' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Code Snippets</a>
+			    <a href="{% url 'single' 'wiki' 'home' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Reference</a>
+			    <a href="{% url 'all' 'blog' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Blog</a>
+			    <a href="{% url 'all' 'education' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Educational Resources</a>
+			    <a href="{% url 'all' 'wiki' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Wiki Pages</a>
+			    <a href="{% url 'all' 'announcements' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Announcements</a>
+			    <a href="{% url 'all' 'events' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Events</a>
+			    <a href="{% url 'all' 'news' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">News</a>
+			    <a href="{% url 'all' 'packages' %}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Packages</a>
+			    <a href="{% url 'timeline' 'all'%}" class="btn btn-common custom-color" style="border-color:white;margin:7px;">Timeline</a>
+			</div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="mobi"><div class="container"><div class="main-slider"><div class="slide-text"><h1>Python for Astronomers</h1><p>The purpose of this web site is to act as a community knowledge base for performing astronomy research with Python. It provides a variety of tutorials,code snippets, resources ,lists of useful packages, a Q/A forum for general discussion, advice, and also features news items, event information and announcements.</p>{% if request.user.is_authenticated %}<h2>Welcome @{{request.user.username}}</h2>{% else %}<h5>Register or Sign In with the Oauth options below!</h5><a href="login/facebook" class="btn btn-common">Facebook</a><a href="login/google-oauth2" class="btn btn-common">Google</a><a href="login/github" class="btn btn-common">Github</a>{% endif %} </div></div></div></div>
+</section>
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="300ms">
+				<a href="{% url 'timeline' 'tl' %}">
+                    <div class="single-service" style="color:black">
+                        <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="300ms">
+                            <img src="{% static 'images/home/icon1.png' %}" alt="">
+                        </div>
+                        <h2>Teach & Learn</h2>
+                        <p>Tutorials , Educational Resources , Code Snippets and much more !</p>
+                    </div>
+					</a>
+                </div>
+                <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="600ms">
+				<a href="{% url 'timeline' 'forum' %}">
+                    <div class="single-service" style="color:black">
+                        <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="600ms">
+                            <img src="{% static 'images/home/icon2.jpg' %}" alt="">
+                        </div>
+                        <h2>Forum</h2>
+                        <p>Broadcast to the world with Blogs, News, Announcements and Events !</p>
+                    </div>
+					</a>
+                </div>
+                <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="900ms">
+                    <a href="{% url 'all' 'packages' %}">
+					<div class="single-service" style="color:black">
+                        <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="900ms">
+                            <img src="{% static 'images/home/icon3.png' %}" alt="">
+                        </div>
+                        <h2>Packages</h2>
+                        <p>Tools you need for your research !</p>
+                    </div></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/#services-->
+
+    <section id="features" style="background:#FFFBEB">
+        <div class="container">
+			<div class="row text-center">
+                <div class="masonery_area">
+			<hr/>
+			<h1> Latest  Teach and Learn Posts </h1>
+			<hr/>
+			{% for obj in tl_posts %}
+				    <div class="col-md-3 col-sm-4 wow fadeInRight">
+                        <div class="single-blog two-column">
+                            <div class="post-content overflow">
+							<div style="display:block;height:100px;overflow:hidden;">
+							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{% autoescape off %}{{obj.title}}{% endautoescape %}</a></h2>
+							</div>
+							<h3 class="post-author"><a><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+							<div class="block_post" style="display:block;height:200px;overflow:hidden;">
+								{% if obj.abstract %}
+								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% else %}
+								{% filter truncatechars:350 %}
+								<p>{% autoescape off %}{{obj.body|raw_content}}{% endautoescape %}</p>
+								{% endfilter %}
+							{% endif %}
+							</div>
+							<a href="{{obj.get_absolute_url}}" class="read-more">View More</a>
+							<div class="post-bottom overflow">
+								<span class="post-date pull-left">{{obj.published|date}}</span>
+								<span class="comments-number pull-right"><a><i class="fa fa-heart"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{obj.total_upvotes}} Love</a></span>
+							</div>
+                            </div>
+                        </div>
+                    </div>
+			{% endfor %}
+			</div>
+			</div>
+        </div>
+    </section>
+
+	<section id="features">
+        <div class="container">
+			<div class="row text-center">
+                <div class="masonery_area">
+			<hr/>
+			<h1> Latest  Forum Posts </h1>
+			<hr/>
+			{% for obj in forum_posts %}
+				    <div class="col-md-3 col-sm-4 wow fadeInLeft">
+                        <div class="single-blog two-column">
+                            <div class="post-content overflow">
+							<div style="display:block;height:100px;overflow:hidden;">
+							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{% autoescape off %}{{obj.title}}{% endautoescape %}</a></h2>
+							</div>
+							<h3 class="post-author"><a><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+							<div class="block_post" style="display:block;height:200px;overflow:hidden;">
+							{% if section == "events" %}
+								<p><b>Start Date :</b>{{obj.start_date_time|date}}</p>
+								{% if obj.website %}
+								<p><b>Website :</b><a href="{{obj.website}}">{{obj.website}}</a></p>
+								{% endif %}
+							{% else %}
+								{% if obj.abstract %}
+								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% else %}
+								{% filter truncatechars:350 %}
+								<p>{% autoescape off %}{{obj.body|raw_content}}{% endautoescape %}</p>
+								{% endfilter %}
+								{% endif %}
+							{% endif %}
+							</div>
+							<a href="{{obj.get_absolute_url}}" class="read-more">View More</a>
+							<div class="post-bottom overflow">
+								<span class="post-date pull-left">{{obj.published|date}}</span>
+								<span class="comments-number pull-right"><a><i class="fa fa-heart"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{obj.total_upvotes}} Love</a></span>
+							</div>
+                            </div>
+                        </div>
+                    </div>
+			{% endfor %}
+			</div>
+			</div>
+        </div>
+    </section>
+
+		<section id="features" style="background:#FFFBEB">
+        <div class="container">
+			<div class="row text-center">
+                <div class="masonery_area">
+			<hr/>
+			<h1> Latest  Package Entries </h1>
+			<hr/>
+			{% for obj in package_posts %}
+				    <div class="col-md-3 col-sm-4 wow fadeInUp">
+                        <div class="single-blog two-column">
+                            <div class="post-content overflow">
+							<div style="display:block;height:50px;overflow:hidden;">
+							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{% autoescape off %}{{obj.title}}{% endautoescape %}</a></h2>
+							</div>
+							<h3 class="post-author"><a><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+							<div class="block_post" style="display:block;height:80px;overflow:hidden;">
+								{% if obj.abstract %}
+								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% else %}
+								{% filter truncatechars:350 %}
+								<p>{% autoescape off %}{{obj.body|raw_content}}{% endautoescape %}</p>
+								{% endfilter %}
+							{% endif %}
+							</div>
+							<a href="{{obj.get_absolute_url}}" class="read-more">View More</a>
+							<div class="post-bottom overflow">
+								<span class="post-date pull-left">{{obj.published|date}}</span>
+								<span class="comments-number pull-right"><a><i class="fa fa-heart"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{obj.total_upvotes}} Love</a></span>
+							</div>
+                            </div>
+                        </div>
+                    </div>
+			{% endfor %}
+			</div>
+			</div>
+        </div>
+    </section>
+    <!--/#action-->
+    <section id="clients">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="clients text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">
+                        <p><img src="{% static 'images/home/clients.png' %}" class="img-responsive" alt=""></p>
+                        <h1>Contribute</h1>
+                        <p>Contributions from the community are strongly encouraged. Dive into any of the sections and start creating and contributing.If you wish to add the feed of your blog to our list of aggregated blogs fill in the contribution form below!</p>
+                    </div>
+				</div>
+                <div class="col-sm-6">
+                    <div class="clients text-center wow fadeInDown" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <h1>Social</h1>
+			<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/AstroPython" data-widget-id="618041910058352640">Tweets by @AstroPython</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>
+                </div>
+            </div>
+        </div>
+     </section>
+{% endblock %}

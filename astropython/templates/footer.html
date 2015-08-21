@@ -1,0 +1,133 @@
+{% load staticfiles %}
+<footer id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 text-center bottom-separator">
+				<img src="{%static 'images/home/under.png' %}" class="img-responsive inline" alt="">
+			</div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="contact-info bottom">
+						<hr/>
+                        <h3>Subscribe : <a href="/feeds/atom">ATOM</a> or <a href="/feeds/rss">RSS</a></h3>
+						<hr/>
+						<h3>New to Python?  <a href="{% url 'try_python' %}">Give it a try !</a></h3>
+						<hr/>
+						<h4><a href="{% url 'list_feed'%}">Contributing Feeds </a></h4><p>To suggest a new feed to our aggregator, fill in the Contact Form on the right !</p>
+						<hr/>
+						{% if g_message %}
+						<h4><a onClick="onClickSlider()">About Slider Images</a></h4>
+						<hr/>
+						{% endif %}
+					</div>
+                </div>
+				<div class="col-md-4 col-sm-6">
+			<div class="testimonial bottom">
+				<h2>Contribute to AstroPython</h2>
+<p>Contributions and feedback from the community are strongly encouraged. If you simply have a question or comment for the AstroPython team please fill in this form and we'll get back to you as soon as possible.
+If you have a new resource, question, or any other content that you'd like to post to the web site then likewise fill in the creation form. If you wish to have elevated priveleges , you can use the form to contact us</p>
+			</div>
+			</div>
+			<div class="col-md-4 col-sm-12">
+                    <div class="contact-form bottom">
+                        <h2>Feedback&nbsp;|&nbsp;Contribute&nbsp;|&nbsp; Contact</h2>
+                        <form method="post" action="{% url 'contact' %}">{% csrf_token %}
+						{% if user.is_authenticated %}
+							<input type="hidden" name="username" value="{{request.user.username}}">
+							<input type="hidden" name="email" value="{{request.user.email}}">
+						{% else %}
+                            <div class="form-group">
+                                <input type="text" aria-labelledby="Username" name="username" class="form-control" required="required" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" aria-labelledby="Email" name="email" class="form-control" required="required" placeholder="Email Id">
+                            </div>
+						{% endif %}
+                            <div class="form-group">
+                                <textarea name="content" aria-labelledby="FeedbackText" id="message" required="required" class="form-control" rows="8" placeholder="We love to hear from you...."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" name="submit" aria-labelledby="SubmitFeedback" class="btn-block btn-warning" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+			<div class="col-sm-12 text-center copyright-text text-center">
+					<div style="font-size: 15px;">
+					    <p> Say Hi ? Help ? Reach Out :  &nbsp;&nbsp;
+						<a href="https://twitter.com/AstroPython"><i class="fa fa-twitter"></i>&nbsp;Twitter</a>&nbsp;&nbsp;
+						<a href="https://github.com/x-calibre/astropython"><i class="fa fa-github"></i>&nbsp;Github</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+						<a onClick="onClickAbout()"><i class="fa fa-info"></i>&nbsp;&nbsp;About Us</a></p>
+					</div>
+					<p>{{g_message}}</p>
+					<p>&copy; AstroPython 2015</p>
+			</div>
+		</div>
+	</div>
+<div class="modal fade" id="about_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align:center;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel">About Us : <b>Team AstroPython</b></h2>
+      </div>
+      <div class="modal-body">
+		   <p style="padding-bottom:5px"> <a style="color:black;" href="mailto:taldcroft@gmail.com"><strong>Tom Aldcroft</strong></a> is a Science
+	 Operations Team member and Flight Director for the Chandra X-ray Observatory</a> and works at the <a
+	 href="http://www.cfa.harvard.edu/sao/">Smithsonian Astrophysical
+	 Observatory</a>.  He uses Python for Chandra
+	 spacecraft operations analysis as well as research on several X-ray
+	 survey projects.  He is the author of the
+	<a href="http://cxc.harvard.edu/contrib/asciitable/">asciitable</a>,
+	<a href="http://cxc.harvard.edu/contrib/cosmocalc/">cosmocalc</a>, and
+	<a href="http://cxc.harvard.edu/contrib/deproject/">deproject</a>
+	 packages.  He is also
+	 interested in Python for the web and writes <a
+	 href="http://www.djangoproject.com/">Django</a> and <a
+	 href="http://code.google.com/appengine/">Google App Engine</a> applications
+	 for presenting large multi-wavelength survey datasets.  He has been the primary mentor for AstroPython
+
+		 <p> <a style="color:black;" href="mailto:thomas.robitaille@gmail.com"><strong>Thomas Robitaille</strong></a> is a Spitzer
+ postdoctoral fellow at the Harvard-Smithsonian <a
+ href="http://www.cfa.harvard.edu/">Center for Astrophysics</a>. He works on
+ studying Galactic star formation, mostly through mid-infrared to mm
+ wavelengths. This includes modeling multi-wavelength observations of young
+ stars and studying the global properties of star formation in the
+ Milky-Way. In his spare time he is a keen Python programmer and is one of
+ the co-developers of the <a href="http://aplpy.sourceforge.net/">APLpy</a> and
+ <a href="http://atpy.sourceforge.net/">ATpy</a> packages.  He also developed
+ the <a href="http://idlsave.sourceforge.net/">IDLSave</a> package.He has been the secondary mentor for the project.</p>
+      <p> <a style="color:black;" href="mailto:jeanconn@head.cfa.harvard.edu"><strong>Jean
+	 Connelly</strong></a> is a Science Operations Team member for
+	 the <A href="chandra.harvard.edu">Chandra X-ray Observatory</a> and works at the <a
+	 href="http://www.cfa.harvard.edu/sao/">Smithsonian Astrophysical
+	 Observatory</a>.  She uses Python for Chandra spacecraft operations with a focus
+	 on the spacecraft aspect camera and aspect determination system.
+         </p>
+	   <p> <a style="color:black;" href="mailto:amanjjw@gmail.com"><strong>Aman Jhunjhunwala</strong></a> is an undergraduate Computer Science student with a passion for Big Data,Machine Learning and Web technologies. He has been the primary developer of this site as a part of Google Summer of Code-2015 programme under the AstroPy project.</p>
+	  </div>
+    </div>
+  </div>
+</div>
+{% if g_message %}
+<div class="modal fade" id="slider_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align:center;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel">About Slider Images</h2>
+      </div>
+      <div class="modal-body">
+          {% for slider in sliders %}
+          <p><h3><b>Slider Image {{ forloop.counter }}</b></h3> </p>
+          <p>{{slider.description}}</p>
+          <p><b>Credits :</b>{{slider.credit}}</p>
+          <hr/>
+          {% endfor %}
+	  </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+</footer>
+<!--/#footer-->

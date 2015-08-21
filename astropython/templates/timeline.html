@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+{% block head_title %}
+Timeline
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						
+						<h1 class="title">{% if section == "all" %}All Posts Timeline{% elif section == "tl" %}All Teach and Learn Posts{% elif section == "forum" %}All Forum Posts{%endif%}</h1>
+						{% if message %}
+						<p ><a href="/timeline/{{section}}"><span class="glyphicon glyphicon-refresh" style="color:black"></span></a>&nbsp;&nbsp;&nbsp;{{message}}</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+
+<div class="container">
+	<div class="row">
+	<div style="padding : 10px;margin-top:20px">
+	<hr/>
+	<ul class="portfolio-filter text-center">
+					<li><a class="btn btn-default"><b>Sort by :</b></a></li>
+					<li><a class="btn btn-default" href="?sort=ratings{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Ratings</a></li>
+					<li><a class="btn btn-default" href="?sort=date{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Date</a></li>
+		</ul>
+		<hr/>
+		<ul class="portfolio-filter text-center">
+					<li><a class="btn btn-default"><b>Filter :</b></a></li>
+					<li><a class="btn btn-default" href="?filter=native{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Native</a></li>
+					<li><a class="btn btn-default" href="?filter=feeds{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Contributing Feeds</a></li>
+					<li><a class="btn btn-default" href="?{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">All Posts</a></li>
+		</ul>
+		<hr/>
+		<div class="sidebar-item tag-cloud text-center" style="color:#686868;">
+		<h3><b>All Tags</b></h3>
+		<ul class="nav nav-pills">
+		{% for tag in tags|sort_tags %}
+			{% if request.GET.tags %}
+			<li><a href="?tags={{request.GET.tags}},{{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% else %}
+			<li><a href="?tags={{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+		<hr/>
+		</div>
+		</div>
+		<div class="timeline-blog overflow">
+			<div class="timeline-divider overflow padding-bottom">
+			{% for obj in data %}
+			{% if obj|isEven:data %}
+				<div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms" data-wow-delay="300ms" style="height:400px">
+					<div class="single-blog timeline">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{{obj.title}}</a></h2>
+							<h3 class="post-author"><a href="#"><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+							{% if section == "events" %}
+								<p><b>Start Date :</b>{{obj.start_date_time|date}}</p>
+								{% if obj.website %}
+								<p><b>Website :</b><a href="{{obj.website}}">{{obj.website}}</a></p>
+								{% endif %}
+							{% else %}
+								{% if obj.abstract %}
+								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% else %}
+								{% filter truncatechars:350 %}
+								<p>{{obj.body|raw_content}}</p>
+								{% endfilter %}
+								{% endif %}
+							{% endif %}
+							<a href="{{obj.get_absolute_url}}" class="read-more">View More</a>
+							<div class="post-bottom overflow">
+								<span class="post-date pull-left">{{obj.published|date}}</span>
+								<span class="comments-number pull-right"><i class="fa fa-heart"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{obj.total_upvotes}} Love</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% else %}
+			<div class="col-sm-6 padding-left arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms" style="height:400px">
+					<div class="single-blog timeline">
+						<div class="post-content overflow">
+							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{{obj.title}}</a></h2>
+							<h3 class="post-author"><a href="#"><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+							{% if section == "events" %}
+								<p><b>Start Date :</b>{{obj.start_date_time|date}}</p>
+								{% if obj.website %}
+								<p><b>Website :</b><a href="{{obj.website}}">{{obj.website}}</a></p>
+								{% endif %}
+							{% else %}
+								{% if obj.abstract %}
+								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% else %}
+								{% filter truncatechars:350 %}
+								<p>{{obj.body|raw_content}}</p>
+								{% endfilter %}
+								{% endif %}
+							{% endif %}
+							<a href="{{obj.get_absolute_url}}" class="read-more">View More</a>
+							<div class="post-bottom overflow">
+								<span class="post-date pull-left">{{obj.published|date}}</span>
+								<span class="comments-number pull-right"><i class="fa fa-heart"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{obj.total_upvotes}} Love</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

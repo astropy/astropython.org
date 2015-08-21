@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_title %}
+{{name}}:
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<div class="container mtb">
+<div class="row">
+	<! --LIST-->
+	<div class="col-lg-12">
+		<div style="text-align:center;color:orange">
+			<img src='{% static "images/complete_icon.png" %}' height="100px" width="100px">
+			{% if state == "raw" %}
+			<h2>Your post has been saved !</h2>
+			<p> Come back later and complete it <a href="/{{section}}/create/{{slug}}">here</a> or access it from the 'My Posts' section of the navigation bar above !</p>
+			{% elif state == "feed_update" %}
+			<p>All the feeds have been updated ! <br/> The new posts are awaiting Moderator approval....</p>
+			{% else %}
+			<h2>Your post has been submitted !</h2>
+			<p> Access it at www.astropython.org/{{section}}/{{slug}} after it passes Moderator Approval ! <br/> An email will be sent to you for the same ! </p>
+			{% endif %}
+			<p><a href="/">Return to Home</a></p>
+			<p><a href="/{{section}}">Return to Section Homepage</a></p>
+		</div>
+	</div><! --/col-lg-8 -->
+</div><! --/row -->
+</div><! --/container -->
+
+
+{% endblock %}

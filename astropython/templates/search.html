@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_title %}
+{{name}}:
+{% endblock %}
+{% load custom_tags %}
+{% load watson %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						<h1 class="title">Search Results for {{name}}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+<section id="blog" class="padding-top">
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+			{%if length == 0 %}
+			<h2>No matching search results found !</h2>
+			{% endif %}
+			{% for single_obj in obj %}
+			<div class="col-sm-12 col-md-12">
+				<div class="single-blog single-column">
+					<div class="post-content overflow">
+						<h2 class="post-title bold"><a href="{{single_obj.url}}">{% autoescape off %}{{single_obj.title}}{% endautoescape %}</a></h2>
+						<h3 class="post-author"><a>Posted by <b>{% for users in single_obj.object.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
+						{% if section == "events" %}
+							<p><b>Start Date :</b>{{single_obj.object.start_date_time|date}}</p>
+							{% if single_obj.object.website %}
+							<p><b>Website :</b><a href="{{single_obj.object.website}}">{{single_obj.object.website}}</a></p>
+							{% endif %}
+						{% else %}
+							{% if single_obj.object.abstract %}
+							<p><b>Abstract :</b>{% autoescape off %}{{single_obj.object.abstract}}{% endautoescape %}</p>
+							{% else %}
+							{% filter truncatechars:350 %}
+							<p>{{single_obj.object.body|raw_content}}</p>
+							{% endfilter %}
+							{% endif %}
+						{% endif %}
+						<a href="{{single_obj.url}}" class="read-more">View More</a>
+						<div class="post-bottom overflow">
+							<ul class="nav navbar-nav post-nav">
+								<li><a><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in single_obj.object.tags.all|sort_tags %}{{tag}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></a> </li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+		 <div class="blog-pagination">
+		{% if  obj.paginator.num_pages > 1 %}
+				<ul class="pagination">
+					{% if obj.has_previous %}
+						<li><a href="search?section={{section}}&q={{query}}&page={{ obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+					{% else %}
+						<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+					{% endif %}
+					{% for num in range %}
+						{% if num == obj.number %}
+							<li class="active"><a href="#">{{num}} <span class="sr-only">(current)</span></a></li>
+						{% else %}
+							<li><a href="search?section={{section}}&q={{query}}&page={{num}}">{{num}}</a></li>
+						{% endif %}
+					{% endfor %}
+					{% if obj.has_next %}
+						<li><a href="search?section={{section}}&q={{query}}&page={{ obj.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+					{% else %}
+						<li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+					{% endif %}
+				</ul>
+		{% endif %}
+		</div>
+		</div>
+	</div>
+</div>
+</section>
+
+
+{% endblock %}

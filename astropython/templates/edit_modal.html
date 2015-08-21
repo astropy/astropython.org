@@ -1,0 +1,24 @@
+<!-- Modal -->
+{% load crispy_forms_tags %}
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Post</h4>
+      </div>
+      <div class="modal-body">
+			<form method="POST" action="">{% csrf_token %}
+			{{form|crispy}}
+			<button type="submit" name="submit" class="btn btn-warning">Confirm Edit</button>
+			</form>
+      </div>
+      <div class="modal-footer">
+	  <p> All Edits are subject to Moderation</p>
+      </div>
+    </div>
+  </div>
+ </div>
+{% if obj.input_type == "WYSIWYG" %}
+	<script type="text/javascript">CKEDITOR.replace( 'body' );</script>
+{% endif %}

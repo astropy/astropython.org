@@ -1,0 +1,60 @@
+<! -- SIDEBAR -->
+{% load staticfiles %}
+{% load custom_tags %}
+<div class="col-md-3 col-sm-5">
+<div class="sidebar blog-sidebar">
+	{% if page == "all" %}
+	<div class="sidebar-item ">
+				<form role="search" action="{% url 'search' %}">
+						<input type="hidden" name="section" value="{{section}}">
+					  <input type="text" class="search-form" name='q' aria-labelledby="Search Sidebar Text" placeholder="Search for ... ">
+					  <button type="submit" class="btn btn-warning" type="button">Search</button>
+				</form>
+	</div><!-- /.row -->
+	<div class="sidebar-item categories">
+		<h3>Sort by</h3>
+		<ul class="nav navbar-stacked">
+			<li><a href="?sort=ratings{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Ratings</a></li>
+			<li><a href="?sort=date{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Date Published</a></li>
+		</ul>
+	</div>
+	<div class="sidebar-item categories">
+		<h3>Filter Content</h3>
+		<ul class="nav navbar-stacked">
+			{% if section == "packages" %}
+			<li><a href="?filter=recommended{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Recommended</a></li>
+			<li><a href="?filter=active{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Active</a></li>
+			<li><a href="?filter=deprecated{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Deprecated</a></li>
+			{% else %}
+			<li><a href="?filter=native{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Native</a></li>
+			<li><a href="?filter=feeds{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Contributing Feeds</a></li>
+			{% endif %}
+			<li><a href="?{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">All Posts</a></li>
+		</ul>
+	</div>
+	<div class="sidebar-item tag-cloud">
+		<h3>All Tags</h3>
+		<ul class="nav nav-pills">
+		{% for tag in tags|sort_tags %}
+			{% if request.GET.tags %}
+			<li><a href="?tags={{request.GET.tags}},{{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% else %}
+			<li><a href="?tags={{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<div class="sidebar-item  recent">
+	<h3>Recent Posts</h3>
+	{% for item in recent %}
+	<div class="media">
+		<div class="media-body">
+			<h4><a href="{% url 'single' section item.slug %}">{{item.title}}</a></h4>
+			<p>Posted on {{item.published|date}}</p>
+		</div>
+	</div>
+	{% endfor %}
+	</div>
+</div>
+</div>

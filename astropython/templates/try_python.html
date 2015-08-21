@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_title %}
+Try Python :
+{% endblock %}
+{% block js %}
+<script>
+$(window).load(function(){
+ $("#message").remove();
+});
+</script>
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12" >
+						<h1 class="title">Try Python</h1>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+<section>
+<p id="message" class="text-center">Please wait while we set up the environment !</p>
+<iframe src="https://trinket.io/embed/python/77f694a793" width="100%" height="550" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+
+</section>
+{% endblock %}

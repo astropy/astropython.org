@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% block head_title %}
+{{obj.title}} :
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block styles %}
+{{form.media}}
+{% if request.user.is_authenticated %}
+ <link rel="stylesheet" href="{{STATIC_URL}}markdown/css/editormd.css" />
+{% endif %}
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "626bc566-fe39-4650-9440-d70b61157997", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+{% endblock %}
+{% block js %}
+{% if request.user.is_authenticated %}
+{% if obj.input_type == "WYSIWYG" and mode == "edit" %}
+<script src="{{STATIC_URL}}ckeditor/ckeditor.js"></script>
+{% endif %}
+{% if obj.input_type == "Markdown" %}
+<script src="{{STATIC_URL}}markdown/lib/marked.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/prettify.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/raphael.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/underscore.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/sequence-diagram.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/flowchart.min.js"></script>
+<script src="{{STATIC_URL}}markdown/lib/jquery.flowchart.min.js"></script>
+<script src="{{STATIC_URL}}markdown/editormd.js"></script>
+<link rel="stylesheet" href="{{STATIC_URL}}markdown/css/editormd.preview.css" />
+<script type="text/javascript">
+	$(document).ready(function(){
+			{% if mode == "edit" %}
+			$("#id_body").replaceWith('<div id=\"test-editormd\"><textarea style="display:none;">{{obj.body|escapejs}}</textarea></div>');
+			testEditormd = editormd("test-editormd", {
+						width: "100%",
+						height : 800,
+						path : '{{STATIC_URL}}markdown/lib/',
+						tex:true,
+						emoji:true,
+						taskList:true,
+						flowChart:true,
+						sequenceDiagram:true,
+						codeFold : true,
+                        syncScrolling : true,
+                        saveHTMLToTextarea : true,
+                        searchReplace : true,
+                        previewCodeHighlight : true,
+                        tocm : true,
+                        imageUpload : false,
+					});
+					$(".editormd-markdown-textarea").attr("name","body");
+			$("#edit_modal").modal("show");
+			{% endif %}
+
+            $(function() {
+                var testEditormdView;
+				    testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+                        //htmlDecode      : true,
+                        htmlDecode      : "style,script,iframe",
+                        //toc             : false,
+                        tocm            : true,    // Using [TOCM]
+                        //tocContainer    : "#custom-toc-container"
+                        gfm             : true,
+                        tocDropdown     : true,
+                        // markdownSourceCode : true, //
+                        emoji           : true,
+                        taskList        : true,
+                        tex             : true,
+                        flowChart       : true,
+                        sequenceDiagram : true,
+
+                });
+            });
+	});
+</script>
+{% else %}
+{% if mode == "edit" %}
+<script>
+$(document).ready(function(){
+$("#edit_modal").modal("show");});
+</script>
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						<h1 class="title" id="title">{% autoescape off %}{{obj.title}}{% endautoescape %}</h1>
+						{% if section == "wiki" %}
+						<a href="../{{section}}/create"><img src='{% static "images/add_new.png" %}' height="50px" width="50px" style="position: absolute;right: 0px;bottom:0px;"> </a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+{% if mode == "edit" %}
+{% include 'edit_modal.html' %}
+{% endif %}
+<section id="blog-details" class="padding-top">
+<div class="container">
+	<div class="row">
+	<div class="col-md-12 col-sm-12" style="word-wrap: break-word;margin-left:0px;">
+		<div class="row">
+			 <div class="col-md-12 col-sm-12">
+
+			 {% if section == "wiki" %}
+			 {% if request.user.is_authenticated %}
+			 <div style="text-align:right">
+			 <a href="?edit=body"><h5>Add to this Wiki Page</h5></a>
+			 </div>
+			 {% endif %}
+			 {% endif %}
+				<div class="single-blog blog-details two-column">
+					<div class="post-content overflow">
+						{% if obj.abstract %}
+							<p id="abstract"><b>Abstract :</b> {% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+						{% endif %}
+						{% if section == "packages" %}
+							<p id="category"><b>Category : </b>{% for ob in obj.category.all %}<em><b>{{ob.name}}&nbsp;&nbsp;&nbsp;</b></em>{% endfor %}</p>
+							{% if obj.homepage %}
+							<p id="homepage"><b>Homepage : </b><a href="{{obj.homepage}}">{{obj.homepage}}</a></p>
+							{% endif %}
+							{% if obj.docs %}
+							<p id="docs"><b>Documentation: </b><a href="{{obj.docs}}">{{obj.docs}}</a></p>
+							{% endif %}
+						{% endif %}
+						{% if section == "events" %}
+							{% if obj.website %}
+							<p id="website"><b>Event Website : </b><a href="{{obj.website}}">{{obj.website}}</a></p>
+							{% endif %}
+							{% if obj.location %}
+							<p id="location"><b>Location : </b>{{obj.location}}</p>
+							{% endif %}
+							<p id="start_date_time"><b>Event Date: </b>{{obj.start_date_time|date}}</p>
+							{% if obj.end_date_time %}
+							<p id="end_date_time"><b>Event End Date : </b>{{obj.end_date_time|date}}</p>
+							{% endif %}
+							{% if obj.all_day_event %}
+							<p>This is an all day event !</p>
+							{% endif %}
+						{% endif %}
+						{% if obj.input_type == "Markdown" %}
+						<div id="test-editormd-view">
+						<textarea style="display:none;" name="test-editormd-markdown-doc">{{obj.body}}</textarea>
+						</div>
+						{% else %}
+						<p id="body_display">{% autoescape off %}{{obj.body}}{% endautoescape %}</p>
+						{% endif %}
+						<br/>
+						{% if section == "education" %}
+							<p id="start_date"><b>Start Date : </b>{{obj.start_date}}</p>
+							<p id="instructor_names"><b>Instructors : </b>{{obj.instructor_names}}</p>
+							<p id="website"><b>Website : </b><a href="{{obj.website}}">{{obj.website}}</a></p>
+							<p id="language"><b>Language : </b>{{obj.language}}</p>
+							<p id="contents"><h4>Course Structure & Contents </h4><br/>{{obj.contents}}</p>
+							<br/>
+							<p id="background"><h4>Recommended Background </h4><br/>{{obj.background}}</p>
+							<br/>
+							<p id="faq"><h4>Frequently Asked Questions </h4><br/>{{obj.faq}}</p>
+							<br/>
+						{% endif %}
+						{% if section != "wiki" %}
+						{% if request.user.is_authenticated %}
+						 <div style="text-align:right">
+						 <a href="?edit=body"><h5>Edit Main Contents</h5></a>
+						 </div>
+						 {% endif %}
+						 {% endif %}
+						<br/>
+						<h5 class="post-author">Posted by <a><b>{% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a> on <b>{{obj.published|date}}</b></h5>
+						{% if obj.tags.all %}
+							<div class="sidebar-item tag-cloud">
+								<h3 id="tags">Tags</h3>
+								<ul class="nav nav-pills">
+								{% for tag in obj.tags.all %}
+									<li><a href="/{{section}}/?tags={{tag.name}}"><b>{{tag.name}}</b></a></li>
+								{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+							<div class="panel-heading">
+									<ul class="nav nav-tabs">
+										<li class="active"><a href="#likes" data-toggle="tab">Rate</a></li>
+										<li><a href="#comments" data-toggle="tab"><span class="disqus-comment-count" data-disqus-url="{{full_url}}">Comments</span></a></li>
+										<li><a href="#share" data-toggle="tab">Share</a></li>
+									</ul>
+							</div>
+								<div class="tab-content">
+									<div class="tab-pane active" id="likes"><div style="text-align:left">
+								<a href="./upvote"><i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;&nbsp;&nbsp; <span class="badge">{{obj.total_upvotes}}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="./downvote"><i class="glyphicon glyphicon-thumbs-down"></i>&nbsp;&nbsp;&nbsp; <span class="badge">{{obj.total_downvotes}}</span></a></div>
+									</div>
+									<div class="tab-pane fade" id="comments"><div id="disqus_thread"></div></div>
+									<div class="tab-pane fade" id="share"><span class='st_facebook_large' displayText='Facebook'></span>
+								<span class='st_twitter_large' displayText='Tweet'></span>
+								<span class='st_googleplus_large' displayText='Google +'></span>
+								<span class='st_email_large' displayText='Email'></span></div>
+								</div>
+							</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	 </div>
+	 {% if request.user.is_authenticated %}
+	<script type="text/javascript">
+		$( "#title,#abstract,#tags,#category,#homepage,#docs,#start_date_time,#end_date_time,#website,#location,#start_date,#instructor_names,#language,#contents,#background,#faq").hover(
+		  function() {
+			attribute=$(this).attr('id');
+			$( this ).append( $( "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?edit="+attribute+"'><img src='{% static 'images/edit_logo.png' %}' height='15px' width='15px'></a></span>" ) );
+		  }, function() {
+			$( this ).find( "span:last" ).remove();
+		  }
+		);
+	</script>
+	{% endif %}
+	<script type="text/javascript">
+		/* * * CONFIGURATION VARIABLES * * */
+		var disqus_shortname = 'astropython'; //registered short name of astropython
+		var disqus_identifier= '{{full_url}}';
+		var disqus_url = '{{full_url}}';
+		/* * * DON'T EDIT BELOW THIS LINE * * */
+		(function() {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		})();
+		(function () {
+			var s = document.createElement('script'); s.async = true;
+			s.type = 'text/javascript';
+			s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+			(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		}());
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+	<!--End of comments section-->
+	</div>
+</div>
+</section>
+{% endblock %}
+{% block endjs %}
+{% endblock %}

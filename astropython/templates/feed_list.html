@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+{% block head_title %}
+{{name}}:
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12">
+						<h1 class="title">{{name}}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+
+<section id="blog" class="padding-top">
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 col-sm-7">
+			<div class="row">
+			{%if length == 0 %}
+			<h2>No {{name}} here !</h2>
+			{% endif %}
+			{% for single_obj in obj %}
+			
+			<div class="col-sm-12 col-md-12">
+				<div class="single-blog single-column">
+					<div class="post-content overflow"><hr/>
+						<h2 class="post-title bold">{{single_obj.title}}</h2>
+						<p><b>URL : </b><a href="{{single_obj.url}}">{{single_obj.url}}</a></p>
+						<p><b>Section : {{single_obj.section|upper}}</b></p>
+						{% if single_obj.notes %}
+						<p><b>Details : </b>{{single_obj.notes}}</p>
+						{% endif %}
+					</div><hr/>
+				</div>
+			</div>
+			
+		{% endfor %}
+		</div>
+		 <div class="blog-pagination">
+		{% if  obj.paginator.num_pages > 1 %}
+				<ul class="pagination">
+					{% if obj.has_previous %}
+						<li><a href="?page={{ obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+					{% else %}
+						<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+					{% endif %}
+					{% for num in range %}
+						{% if num == obj.number %}
+							<li class="active"><a href="#">{{num}} <span class="sr-only">(current)</span></a></li>
+						{% else %}
+							<li><a href="?page={{num}}">{{num}}</a></li>
+						{% endif %}
+					{% endfor %}
+					{% if obj.has_next %}
+						<li><a href="?page={{ obj.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+					{% else %}
+						<li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+					{% endif %}
+				</ul>
+		{% endif %}
+		</div>
+		</div>
+	</div>
+</div>
+</section>
+
+
+{% endblock %}

@@ -1,0 +1,1 @@
+{"date_published": "2009-11-17", "author": "tom", "description": "Description: Interact with IDL from pythonHomepage URL: http://www.cacr.caltech.edu/~mmckerns/software.htmlPython bindings for IDL, based on Andrew McMurry's python-IDL. Requires ITT's IDL and numarray.", "tags": ["idl"], "title": "pyIDL"}
