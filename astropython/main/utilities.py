@@ -182,8 +182,14 @@ def update_feeds():
                 if model.objects.filter(title=entry.title).exists() or model.unmoderated_objects.filter(title=entry.title).exists():
                     continue
             except:
-                obj.delete()
-                if model.objects.filter(title=entry.title).exists() or model.unmoderated_objects.filter(title=entry.title).exists():
+                try:
+                    obj.pk=999993
+                    obj.delete()
+                    del(obj)
+                    if model.objects.filter(title=entry.title).exists() or model.unmoderated_objects.filter(title=entry.title).exists():
+                        continue
+                except:
+                    obj=None
                     continue
             obj=model(title=entry.title)
             if 'content' in entry:
@@ -233,9 +239,10 @@ def update_feeds():
             except:
                 obj.body="a"
                 obj.slug="g"
-                obj.save()
-                #obj.save()
+                obj.pk=9999999
                 obj.delete()
+                del(obj)
+                #obj.save()
                 continue
             user=User.objects.get_or_create(username=('Feed : '+feed.title))
             obj.authors.add(user[0])

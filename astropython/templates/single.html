@@ -163,16 +163,31 @@ BLOG CONTENT
 						{% endif %}
 						<br/>
 						{% if section == "education" %}
+						    {% if obj.start_date %}
 							<p id="start_date"><b>Start Date : </b>{{obj.start_date}}</p>
+							{% endif %}
+							{% if obj.instructor_names %}
 							<p id="instructor_names"><b>Instructors : </b>{{obj.instructor_names}}</p>
+							{% endif %}
+							{% if obj.website %}
 							<p id="website"><b>Website : </b><a href="{{obj.website}}">{{obj.website}}</a></p>
+							{% endif %}
+							{% if obj.language %}
 							<p id="language"><b>Language : </b>{{obj.language}}</p>
-							<p id="contents"><h4>Course Structure & Contents </h4><br/>{{obj.contents}}</p>
+							{% endif %}
 							<br/>
-							<p id="background"><h4>Recommended Background </h4><br/>{{obj.background}}</p>
+							{% if obj.contents %}
+							<p id="contents"><h4>Course Structure & Contents </h4><br/>{{obj.contents|linebreaks }}</p>
+							{% endif %}
 							<br/>
-							<p id="faq"><h4>Frequently Asked Questions </h4><br/>{{obj.faq}}</p>
+							{% if obj.background %}
+							<p id="background"><h4>Recommended Background </h4><br/>{{obj.background|linebreaks }}</p>
 							<br/>
+							{% endif %}
+							{% if obj.faq %}
+							<p id="faq"><h4>Frequently Asked Questions </h4><br/>{{obj.faq|linebreaks}}</p>
+							<br/>
+							{% endif %}
 						{% endif %}
 						{% if section != "wiki" %}
 						{% if request.user.is_authenticated %}

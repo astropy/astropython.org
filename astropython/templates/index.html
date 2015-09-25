@@ -106,7 +106,7 @@
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="20000">
                 <ol class="carousel-indicators">
 				{% for slider in sliders %}
-                    <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter }}" {% if forloop.first %}class="active"{% endif %}></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter|minus1 }}" {% if forloop.first %}class="active"{% endif %}></li>
                 {% endfor %}
 				</ol>
                 <div class="carousel-inner">
@@ -114,6 +114,7 @@
                     <div class="item {% if forloop.first %}active{% endif %}">
 						<input type="hidden" id="color-select" value="{{slider.text_color}}">
                         <img src="{{slider.get_image_url}}" alt="Carousel Image">
+                        <div class="carousel-caption custom-color"><p>Credits : {{slider.credit}}</p></div>
                     </div>
 					{% endfor %}
                 </div>
@@ -122,7 +123,7 @@
 				<div class="col-md-12 custom-color">
                 <div class="col-md-5 col-md-offset-1" style="margin-top:100px;">
                     <h1 class="custom-color">Python for Astronomers</h1>
-                    <p>The purpose of this web site is to act as a community knowledge base for performing astronomy research with Python. It provides a variety of tutorials, code snippets, resources, lists of useful packages, general discussion, advice, and also features news items, event information and announcements.</p>
+                    <p>The purpose of this web site is to act as a community knowledge base for performing astronomy research with Python. It provides a variety of tutorials, code snippets, resources, lists of useful packages, general discussion, advice and also features news items, event information and announcements.</p>
 					{% if request.user.is_authenticated %}
 					<h2 class="custom-color">Welcome @{{request.user.username}}</h2>
 					{% else %}
@@ -305,11 +306,13 @@
 							<h2 class="post-title bold"><a href="{{obj.get_absolute_url}}">{% autoescape off %}{{obj.title}}{% endautoescape %}</a></h2>
 							</div>
 							<h3 class="post-author"><a><b>Posted by {% for users in obj.authors.all %}{{users.username}}{% endfor %}</b></a></h3>
-							<div class="block_post" style="display:block;height:80px;overflow:hidden;">
+							<div class="block_post" style="display:block;height:70px;overflow:hidden;">
 								{% if obj.abstract %}
+								{% filter truncatechars:110 %}
 								<p>{% autoescape off %}{{obj.abstract}}{% endautoescape %}</p>
+								{% endfilter %}
 								{% else %}
-								{% filter truncatechars:350 %}
+								{% filter truncatechars:150 %}
 								<p>{% autoescape off %}{{obj.body|raw_content}}{% endautoescape %}</p>
 								{% endfilter %}
 							{% endif %}

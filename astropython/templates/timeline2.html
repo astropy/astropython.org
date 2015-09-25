@@ -16,7 +16,11 @@ TITLE WRAP
 			<div class="row">
 				<div class="action">
 					<div class="col-sm-12">
+						
 						<h1 class="title">{% if section == "all" %}All Posts Timeline{% elif section == "tl" %}All Teach and Learn Posts{% elif section == "forum" %}All Forum Posts{%endif%}</h1>
+						{% if message %}
+						<p ><a href="/timeline/{{section}}"><span class="glyphicon glyphicon-refresh" style="color:black"></span></a>&nbsp;&nbsp;&nbsp;{{message}}</p>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -30,9 +34,33 @@ BLOG CONTENT
 
 <div class="container">
 	<div class="row">
-	<div style="padding : 10px;margin-top:20px" class="text-right">
-		<div class="text-right" style="color:#686868;">
-			<p><a href="/timeline/{{section}}/full"><b>Switch to advanced timeline view </b></a></p>
+	<div style="padding : 10px;margin-top:20px">
+	<hr/>
+	<ul class="portfolio-filter text-center">
+					<li><a class="btn btn-default"><b>Sort by :</b></a></li>
+					<li><a class="btn btn-default" href="?sort=ratings{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Ratings</a></li>
+					<li><a class="btn btn-default" href="?sort=date{% if get.filter %}&filter={{get.filter}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Date</a></li>
+		</ul>
+		<hr/>
+		<ul class="portfolio-filter text-center">
+					<li><a class="btn btn-default"><b>Filter :</b></a></li>
+					<li><a class="btn btn-default" href="?filter=native{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Native</a></li>
+					<li><a class="btn btn-default" href="?filter=feeds{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">Contributing Feeds</a></li>
+					<li><a class="btn btn-default" href="?{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.tags %}&tags={{get.tags}}{% endif %}">All Posts</a></li>
+		</ul>
+		<hr/>
+		<div class="sidebar-item tag-cloud text-center" style="color:#686868;">
+		<h3><b>All Tags</b></h3>
+		<ul class="nav nav-pills">
+		{% for tag in tags|sort_tags %}
+			{% if request.GET.tags %}
+			<li><a href="?tags={{request.GET.tags}},{{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% else %}
+			<li><a href="?tags={{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+		<hr/>
 		</div>
 		</div>
 		<div class="timeline-blog overflow">

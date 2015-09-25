@@ -93,7 +93,7 @@ class Package(BasePost):
 
 class EducationalResource(BasePost):
     start_date = models.DateTimeField(null=True, blank=True,help_text="Format : YYYY-MM-DD")#Date the course starts
-    instructor_names = models.CharField(max_length=400)#Names of Instructors
+    instructor_names = models.CharField(max_length=400,blank=True)#Names of Instructors
     website = models.URLField(blank=True,verbose_name='Course Website')#Website hosting the course, or having more info about the course
     contents = models.TextField(blank=True,verbose_name='Course Contents') #Syllabus or contents of the course
     background = models.TextField(blank=True,verbose_name='Recommended Background')#Recommended Backgroud

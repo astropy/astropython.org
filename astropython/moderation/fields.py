@@ -51,7 +51,10 @@ class SerializedObjectField(models.TextField):
             self.serialize_format,
             value.encode('utf-8'),
             ignorenonexistent=True)
-        obj = next(obj_generator).object
+        try:
+            obj = next(obj_generator).object
+        except:
+            return
         for parent in obj_generator:
             for f in parent.object._meta.fields:
                 try:
@@ -86,8 +89,11 @@ class SerializedObjectField(models.TextField):
                 value = self.value_from_object(kwargs['instance'])
 
                 if value:
-                    setattr(kwargs['instance'], self.attname,
-                            self._deserialize(value))
+                    try:
+                        setattr(kwargs['instance'], self.attname,
+                                self._deserialize(value))
+                    except:
+                        setattr(kwargs['instance'], self.attname, 'a')
                 else:
                     setattr(kwargs['instance'], self.attname, None)
 

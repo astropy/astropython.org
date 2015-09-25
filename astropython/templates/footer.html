@@ -24,13 +24,14 @@
 				<div class="col-md-4 col-sm-6">
 			<div class="testimonial bottom">
 				<h2>Contribute to AstroPython</h2>
-<p>Contributions and feedback from the community are strongly encouraged. If you simply have a question or comment for the AstroPython team please fill in this form and we'll get back to you as soon as possible.
-If you have a new resource, question, or any other content that you'd like to post to the web site then likewise fill in the creation form. If you wish to have elevated priveleges , you can use the form to contact us</p>
+<p>Contributions and feedback from the community are strongly encouraged.If you find a bug or wish to suggest new features for the site , file an issue on <a href="https://github.com/astropy/astropython.org">Github</a>. If you simply have a question or comment for the AstroPython team please fill in this form and we'll get back to you as soon as possible.
+If you have a new resource, question, or any other content that you'd like to post to the web site then likewise fill in the creation form. If you wish to have elevated priveleges , you can use the form to contact us. </p>
 			</div>
 			</div>
 			<div class="col-md-4 col-sm-12">
                     <div class="contact-form bottom">
                         <h2>Feedback&nbsp;|&nbsp;Contribute&nbsp;|&nbsp; Contact</h2>
+                        {% if user.is_authenticated %}
                         <form method="post" action="{% url 'contact' %}">{% csrf_token %}
 						{% if user.is_authenticated %}
 							<input type="hidden" name="username" value="{{request.user.username}}">
@@ -50,13 +51,16 @@ If you have a new resource, question, or any other content that you'd like to po
                                 <input type="submit" name="submit" aria-labelledby="SubmitFeedback" class="btn-block btn-warning" value="Submit">
                             </div>
                         </form>
+                        {% else %}
+                        <p>We would love to hear from you but please login to access the Contact Form !</p>
+                        {% endif %}
                     </div>
                 </div>
 			<div class="col-sm-12 text-center copyright-text text-center">
 					<div style="font-size: 15px;">
-					    <p> Say Hi ? Help ? Reach Out :  &nbsp;&nbsp;
+					    <p> Say Hi ? Reach Out :  &nbsp;&nbsp;
 						<a href="https://twitter.com/AstroPython"><i class="fa fa-twitter"></i>&nbsp;Twitter</a>&nbsp;&nbsp;
-						<a href="https://github.com/x-calibre/astropython"><i class="fa fa-github"></i>&nbsp;Github</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+						<a href="https://github.com/astropy/astropython.org"><i class="fa fa-github"></i>&nbsp;Website Source</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 						<a onClick="onClickAbout()"><i class="fa fa-info"></i>&nbsp;&nbsp;About Us</a></p>
 					</div>
 					<p>{{g_message}}</p>

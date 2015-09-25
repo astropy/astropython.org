@@ -21,13 +21,20 @@ class SliderAdmin(admin.ModelAdmin):
     class Meta:
         model=Slider
 
+class PackageAdmin(ModerationAdmin):
+	list_display = ['title', 'category']
+	list_editable = ['category']
+	class Meta:
+		model = Package
+
+
 admin.site.register(Tutorial,Admin)
 admin.site.register(Snippet,Admin)
 admin.site.register(Wiki,Admin)
 admin.site.register(Announcement,Admin)
 admin.site.register(News,Admin)
 admin.site.register(Blog,Admin)
-admin.site.register(Package,Admin)
+admin.site.register(Package,PackageAdmin)
 admin.site.register(EducationalResource,Admin)
 admin.site.register(Event,Admin)
 admin.site.register(Contact)

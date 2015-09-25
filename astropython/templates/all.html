@@ -45,7 +45,7 @@ BLOG CONTENT
 			{% endif %}
 			{% if section == "packages" %}
 			<div class="masonery_area">
-			<table align="center" cellpadding="30" style="width:100%">
+			<table align="center" cellpadding="20" style="width:100%">
 			<tr style="border-bottom:1pt solid black;">
 				<td style="vertical-align: center;horizontal-align:center;padding:15px;"><h2>Title</h2></td>
 				<td style="vertical-align: center;padding:15px;"><h2>Abstract</h2></td>
@@ -55,7 +55,21 @@ BLOG CONTENT
 			<tr style="border-bottom:1pt dotted gray;">
 				<td style="vertical-align: center;padding:15px;"><a href="../{{section}}/{{single_obj.slug}}"><h3><b>{{single_obj.title}}</b></h3></a></td>
 				<td style="vertical-align: center;padding:15px;">{% autoescape off %}{{single_obj.abstract}}{% endautoescape %}</td>
-				<td style="vertical-align: center;padding:15px;color:black"><i class="fa fa-tag">&nbsp;&nbsp;{% for tag in single_obj.tags.all|sort_tags %}{{tag}}&nbsp;&nbsp;&nbsp; {% endfor %}</i></td>
+				<td style="vertical-align: center;padding:15px;">
+				<div class="sidebar-item tag-cloud">
+				<ul class="nav nav-pills">
+							{% if single_obj.tags.all %}
+							{% for tag in single_obj.tags.all|sort_tags %}
+							    {% if request.GET.tags %}
+                        			<li><a href="?tags={{request.GET.tags}},{{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+                        			{% else %}
+                        			<li><a href="?tags={{tag}}{% if get.sort %}&sort={{get.sort}}{% endif %}{% if get.filter %}&filter={{get.filter}}{% endif %}"><b>{{tag}}</b></a></li>
+                        			{% endif %}
+							{% endfor %}
+							{% endif %}
+				</ul>
+				</div>
+				</td>
 			  </tr>
 			{% endfor %}
 			</table>
