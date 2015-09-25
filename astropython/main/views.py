@@ -332,3 +332,6 @@ def display_feed_list(request):
 
 def try_python(request):
     return render(request,'try_python.html')
+
+def interactive(request):
+    return render(request,'interactive.html')

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_title %}
+Interactive Tutorials
+{% endblock %}
+{% block js %}
+<script>
+</script>
+{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block content %}
+<!-- *****************************************************************************************************************
+TITLE WRAP
+***************************************************************************************************************** -->
+<section id="page-breadcrumb">
+	<div class="vertical-center sun">
+		 <div class="container">
+			<div class="row">
+				<div class="action">
+					<div class="col-sm-12" >
+						<h1 class="title">Interactive IPython Tutorials</h1>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/#page-breadcrumb-->
+<!-- *****************************************************************************************************************
+BLOG CONTENT
+***************************************************************************************************************** -->
+<section id="body" style="padding-top:50px;">
+<div class="container">
+	<div class="row">
+	<div class="panel panel-warning">
+<div class="panel-heading">
+    <h3 class="panel-title">Free Form</h3>
+  </div>
+  <div class="panel-body">
+    <div class="list-group">
+	<a href="http://mybinder.org/repo/x-calibre/Free-Form" class="list-group-item">
+    <h4 class="list-group-item-heading">An IPython Notebook with most Astonomy Packages added</h4>
+    <p class="list-group-item-text">Apart from Scientific Packages , Astronomy packages included are astropy,astroplan and astroquery</p>
+	</a>
+</div>
+  </div>
+  </div>
+<div class="panel panel-warning">
+<div class="panel-heading">
+    <h3 class="panel-title">AstroPy Tutorials</h3>
+  </div>
+  <div class="panel-body">
+    <div class="list-group">
+	<a href="http://mybinder.org/repo/x-calibre/FITS-header" class="list-group-item">
+    <h4 class="list-group-item-heading">FITS Header</h4>
+    <p class="list-group-item-text"></p>
+	</a>
+	<div class="list-group">
+	<a href="http://mybinder.org/repo/x-calibre/FITS-tables" class="list-group-item">
+    <h4 class="list-group-item-heading">FITS Tables</h4>
+    <p class="list-group-item-text"></p>
+	</a>
+	<div class="list-group">
+	<a href="http://mybinder.org/repo/x-calibre/FITS-images" class="list-group-item">
+    <h4 class="list-group-item-heading">FITS Images</h4>
+    <p class="list-group-item-text"></p>
+	</a>
+</div>
+  </div>
+  <div class="panel-footer">From https://github.com/astropy/astropy-tutorials</div>
+</div>
+</div>
+</div>
+</section>
+{% endblock %}
