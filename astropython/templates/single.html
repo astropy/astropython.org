@@ -133,7 +133,7 @@ BLOG CONTENT
 						{% if section == "packages" %}
 							<p id="category"><b>Category : </b>{% for ob in obj.category.all %}<em><b>{{ob.name}}&nbsp;&nbsp;&nbsp;</b></em>{% endfor %}</p>
 							{% if obj.homepage %}
-							<p id="homepage"><b>Homepage : </b><a href="{{obj.homepage}}">{{obj.homepage}}</a></p>
+							<p id="homepage"><b>Source code : </b><a href="{{obj.homepage}}">{{obj.homepage}}</a></p>
 							{% endif %}
 							{% if obj.docs %}
 							<p id="docs"><b>Documentation: </b><a href="{{obj.docs}}">{{obj.docs}}</a></p>
