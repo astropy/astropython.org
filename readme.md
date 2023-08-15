@@ -1,3 +1,5 @@
+# astropython.org is archived -- THE SITE IS NO LONGER ASSOCIATED WITH ASTROPY, VISIT AT YOUR OWN RISK
+
 Repository for [AstroPython](http://www.astropython.org) - A community resource site for Python users in Astronomy
 
 The purpose of this web site is to act as a community knowledge base for performing astronomy research with Python. It provides a variety of tutorials,code snippets, resources ,lists of useful packages, general discussion, advice, and also features news items, event information and announcements.
